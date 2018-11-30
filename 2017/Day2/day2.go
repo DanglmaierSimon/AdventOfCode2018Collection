@@ -9,6 +9,7 @@ import "strconv"
 func main() {
 	var checksum uint64
 
+	//The Spreadsheet is loaded from a file and read line by line
 	file, err := os.Open("input.txt")
 
 	if err != nil {
