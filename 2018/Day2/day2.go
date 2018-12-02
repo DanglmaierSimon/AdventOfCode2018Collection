@@ -88,7 +88,6 @@ func partTwo(input []string) string {
 					}
 				}
 			}
-
 		}
 	}
 
