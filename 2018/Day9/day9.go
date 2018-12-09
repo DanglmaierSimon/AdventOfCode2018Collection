@@ -3,47 +3,51 @@ package main
 import (
 	"container/list"
 	"fmt"
+	"time"
 )
 
 type testcase struct {
 	players int
 	marbles int
-	score   int64
+	exp     int64
 }
 
 func main() {
 
-	//Test 1: Result: 32
-	//const players = 9
-	//const marbles = 25
+	tests := []testcase{
+		testcase{9, 25, 32},
+		testcase{10, 1618, 8317},
+		testcase{13, 7999, 146373},
+		testcase{17, 1104, 2764},
+		testcase{21, 6111, 54718},
+		testcase{30, 5807, 37305},
+		testcase{476, 71431, 384205},
+		testcase{476, 7143100, 3066307353},
+	}
 
-	//Test 2: Result: 8317
-	//const players = 10
-	//const marbles = 1618
+	for i, t := range tests {
+		start := time.Now()
 
-	//Test 3: Result: 146373
-	//const players = 13
-	//const marbles = 7999
+		score, id := doCalc(t.players, t.marbles)
 
-	//Test 4: Result: 2764
-	//const players = 17
-	//const marbles = 1104
+		dur := time.Since(start)
 
-	//Test 5: Result: 54718
-	//const players = 21
-	//const marbles = 6111
+		fmt.Printf("Testcase [%d]: ", i)
 
-	//Test 6: Result: 37305
-	//const players = 30
-	//const marbles = 5807
+		if score == t.exp {
+			fmt.Printf("Test passed! Score: %d; Player ID: %d\n", score, id+1)
+		} else {
+			fmt.Printf("Test not passed! Expected Score: %d; Result: %d\n", t.exp, score)
+		}
 
-	//The real deal: Result: 384205
-	const players = 476
-	const marbles = 71431 * 100
+		fmt.Printf("Duration: %s\n=================\n", dur)
+	}
+}
 
+func doCalc(players int, marbles int) (result int64, id int) {
 	var board = list.New()
 
-	var score [players]int
+	var score = make([]int, players)
 
 	var max = score[0]
 	var maxIdx int
@@ -55,9 +59,6 @@ func main() {
 
 	var currMarbleIdx = board.Back()
 
-	//fmt.Println(board)
-
-	//var currMarble = 3
 	var currPlayer = 3
 
 	for m := 4; m <= marbles; m++ {
@@ -112,5 +113,6 @@ func main() {
 		}
 
 	}
-	fmt.Printf("Highest Score: %d; Player ID: %d\n", max, maxIdx)
+
+	return int64(max), maxIdx
 }
