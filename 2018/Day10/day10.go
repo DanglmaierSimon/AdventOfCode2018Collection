@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -15,20 +16,32 @@ type light struct {
 	vy int
 }
 
-type arr struct {
+type info struct {
 	minx int
 	miny int
+
 	maxx int
 	maxy int
+
+	area int64
+}
+
+type previt struct {
+	i info
+	l []light
 }
 
 func main() {
 	var input []string
 	var lmap []light
-	var limits arr
+	//var lmapPrev []light
+	var prev info
+	var curr info
 
-	file, err := os.Open("input_test_1.txt")
-	//file, err := os.Open("input.txt")
+	var history []previt
+
+	//file, err := os.Open("input_test_1.txt")
+	file, err := os.Open("input.txt")
 
 	if err != nil {
 		fmt.Println("Error: Could not open file!")
@@ -93,26 +106,99 @@ func main() {
 		lmap = append(lmap, light{x, y, vx, vy})
 
 	}
+	//lmapPrev = lmap
+	lmap, prev = doSim(lmap)
 
-	for !checkForMessage(&lmap) {
-		doSim(&lmap)
+	//iteration := 0
+
+	for {
+		lmap, curr = doSim(lmap)
+
+		history = append(history, previt{curr, lmap})
+		if prev.area < curr.area {
+			//printMap(lmap, curr)
+			break
+		}
+
+		prev = curr
+		//lmapPrev = lmap
+		/*
+			fmt.Println(iteration)
+			printMap(lmap, curr)
+			time.Sleep(1000000000)
+			fmt.Println()
+			fmt.Println()
+
+			iteration++
+		*/
 	}
+
+	for i := 1; i <= 100; i++ {
+		printMap(history[len(history)-i].l, history[len(history)-i].i)
+
+		fmt.Println()
+		fmt.Println()
+	}
+
+	fmt.Println(len(history))
 
 }
 
-func checkForMessage(lmap *[]light) bool {
+func doSim(lmap []light) ([]light, info) {
+	var res info
 
-	for _, x := range *lmap {
-		for _, y := range *lmap {
-			if !(x.px-1 == y.px || x.px+1 == y.px || x.py-1 == y.py || x.py+1 == y.py) {
-				return false
-			}
+	res.minx = lmap[0].px
+	res.miny = lmap[0].py
+
+	res.maxx = lmap[0].px
+	res.maxy = lmap[0].py
+
+	for i := range lmap {
+		lmap[i].px += lmap[i].vx
+		lmap[i].py += lmap[i].vy
+
+		if lmap[i].px < res.minx {
+			res.minx = lmap[i].px
+		} else if lmap[i].px > res.maxx {
+			res.maxx = lmap[i].px
+		}
+
+		if lmap[i].py < res.miny {
+			res.miny = lmap[i].py
+		} else if lmap[i].py > res.maxy {
+			res.maxy = lmap[i].py
 		}
 	}
 
-	return true
+	res.area = int64((math.Abs(float64(res.maxx)) - math.Abs(float64(res.minx)))) *
+		int64((math.Abs(float64(res.maxy)) - math.Abs(float64(res.miny))))
+
+	return lmap, res
 }
 
-func doSim(lmap *[]light, a arr) (res arr) {
+func printMap(lmap []light, i info) {
+	diffx := int((math.Abs(float64(i.maxx)) - math.Abs(float64(i.minx))))
+	diffy := int((math.Abs(float64(i.maxy)) - math.Abs(float64(i.miny))))
+
+	for y := 0; y <= diffy; y++ {
+		for x := 0; x <= diffx; x++ {
+
+			printDot := true
+			for _, z := range lmap {
+				if z.px == i.minx+x && z.py == i.miny+y {
+					printDot = false
+					break
+				}
+			}
+
+			if printDot {
+				fmt.Print(".")
+			} else {
+				fmt.Print("#")
+			}
+		}
+
+		fmt.Println()
+	}
 
 }
