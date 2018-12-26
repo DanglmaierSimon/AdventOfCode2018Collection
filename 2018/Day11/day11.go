@@ -3,8 +3,16 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"sync"
 	"time"
 )
+
+type pwr struct {
+	lvl int
+	x   int
+	y   int
+	s   int
+}
 
 func main() {
 	//Grid Serial number
@@ -26,26 +34,34 @@ func main() {
 	fmt.Printf("Time for filling the array: %s\n", time.Since(start))
 
 	for s := 1; s < 300; s++ {
-		var max, maxX, maxY int
 
-		for x := 0; x <= (300 - s); x++ {
-			for y := 0; y <= (300 - s); y++ {
-				s := calcTotalPower(x, y, &grid, s)
+		for x := 0; x < (300 - s); x++ {
+			ch := make(chan pwr, 300)
 
-				if s > max {
-					max = s
-					maxX = x
-					maxY = y
-				}
+			var wg sync.WaitGroup
 
+			for y := 0; y < (300 - s); y++ {
+				wg.Add(1)
+				go func(yi int, xi int, si int) {
+					//fmt.Println(xi, yi, s)
+					res := calcTotalPower(xi, yi, &grid, si)
+					ch <- pwr{res, xi, yi, si}
+					wg.Done()
+				}(y, x, s)
 			}
-		}
 
-		if totalMax < max {
-			totalMax = max
-			totalX = maxX
-			totalY = maxY
-			size = s
+			wg.Wait()
+
+			close(ch)
+
+			for v := range ch {
+				if v.lvl > totalMax {
+					totalMax = v.lvl
+					totalX = v.x
+					totalY = v.y
+					size = v.s
+				}
+			}
 		}
 	}
 
