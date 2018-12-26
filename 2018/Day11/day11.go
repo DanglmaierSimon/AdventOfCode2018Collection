@@ -33,38 +33,47 @@ func main() {
 
 	fmt.Printf("Time for filling the array: %s\n", time.Since(start))
 
+	ch := make(chan pwr, 300)
+
+	var wg sync.WaitGroup
+
 	for s := 1; s < 300; s++ {
 
-		for x := 0; x < (300 - s); x++ {
-			ch := make(chan pwr, 300)
+		go func(si int) {
+			var max, maxx, maxy, size int
 
-			var wg sync.WaitGroup
+			wg.Add(1)
 
-			for y := 0; y < (300 - s); y++ {
-				wg.Add(1)
-				go func(yi int, xi int, si int) {
-					//fmt.Println(xi, yi, s)
-					res := calcTotalPower(xi, yi, &grid, si)
-					ch <- pwr{res, xi, yi, si}
-					wg.Done()
-				}(y, x, s)
-			}
+			for x := 0; x < (300 - si); x++ {
+				for y := 0; y < (300 - si); y++ {
+					res := calcTotalPower(x, y, &grid, si)
 
-			wg.Wait()
-
-			close(ch)
-
-			for v := range ch {
-				if v.lvl > totalMax {
-					totalMax = v.lvl
-					totalX = v.x
-					totalY = v.y
-					size = v.s
+					if res > max {
+						max = res
+						maxx = x
+						maxy = y
+						size = si
+					}
 				}
 			}
-		}
+			ch <- pwr{max, maxx, maxy, size}
+			wg.Done()
+		}(s)
+
 	}
 
+	wg.Wait()
+
+	close(ch)
+
+	for v := range ch {
+		if v.lvl > totalMax {
+			totalMax = v.lvl
+			totalX = v.x
+			totalY = v.y
+			size = v.s
+		}
+	}
 	elapsed := time.Since(start)
 
 	fmt.Println("Max Value: " + strconv.Itoa(totalMax))
