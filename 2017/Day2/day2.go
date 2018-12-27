@@ -29,8 +29,6 @@ func main() {
 	for _, wholeLine := range input {
 		diff := 0
 
-		fmt.Printf("Line: %s \n", wholeLine)
-
 		line := strings.Split(wholeLine, "\t")
 
 		min, errmin := strconv.Atoi(line[0])
@@ -43,34 +41,29 @@ func main() {
 
 		for _, val := range line {
 
-			if len(val) > 0 {
-
-				value, err := strconv.Atoi(val)
-
-				if err != nil {
-					fmt.Println("Error converting value to int!")
-
-					fmt.Printf("String: %s \n", val)
-
-					return
-				}
-
-				if value < min {
-					fmt.Printf("New min value! Old: %d; New:%d\n", min, value)
-					min = value
-				}
-
-				if value > max {
-					fmt.Printf("New max value! Old: %d; New:%d\n", max, value)
-					max = value
-				}
-
-				diff = max - min
+			if len(val) == 0 {
+				continue
 			}
+
+			value, err := strconv.Atoi(val)
+
+			if err != nil {
+				fmt.Println("Error converting value to int!")
+
+				fmt.Printf("String: %s \n", val)
+
+				return
+			}
+
+			if value < min {
+				min = value
+			} else if value > max {
+				max = value
+			}
+
+			diff = max - min
 		}
-
 		checksum += uint64(diff)
-
 	}
 
 	fmt.Printf("The final checksum is: %d\n", checksum)
@@ -86,24 +79,20 @@ func main() {
 		for i := 0; i < len(line); i++ {
 			for j := 0; j < len(line); j++ {
 
-				if !(len(line[i]) == 0 || len(line[j]) == 0) {
+				if (len(line[i]) == 0) || (len(line[j]) == 0) {
+					continue
+				}
 
-					num1, err1 := strconv.Atoi(line[i])
-					num2, err2 := strconv.Atoi(line[j])
+				num1, err1 := strconv.Atoi(line[i])
+				num2, err2 := strconv.Atoi(line[j])
 
-					if err1 != nil || err2 != nil {
-						fmt.Println("Something went wrong!")
-						return
-					}
+				if err1 != nil || err2 != nil {
+					fmt.Println("Something went wrong!")
+					return
+				}
 
-					//fmt.Printf("Comparing %d and %d\n", num1, num2)
-
-					if num1%num2 == 0 && num1 != num2 {
-						fmt.Printf("1: %d divides %d\n", num1, num2)
-						sum += num1 / num2
-						fmt.Printf("Sum is: %d\n", sum)
-					}
-
+				if num1%num2 == 0 && num1 != num2 {
+					sum += num1 / num2
 				}
 			}
 		}
