@@ -72,8 +72,6 @@ func main() {
 
 	for _, wholeLine := range input {
 
-		//fmt.Printf("Line: %s \n", wholeLine)
-
 		line := strings.Split(wholeLine, "\t")
 
 		for i := 0; i < len(line); i++ {
