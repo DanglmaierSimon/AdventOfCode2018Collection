@@ -34,7 +34,6 @@ type previt struct {
 func main() {
 	var input []string
 	var lmap []light
-	//var lmapPrev []light
 	var prev info
 	var curr info
 
@@ -131,16 +130,21 @@ func main() {
 
 			iteration++
 		*/
+		/*printMap(lmap, prev)
+
+		fmt.Println()
+		fmt.Println()*/
+
 	}
 
-	for i := 1; i <= 100; i++ {
+	for i := 1; i <= 20; i++ {
 		printMap(history[len(history)-i].l, history[len(history)-i].i)
 
 		fmt.Println()
 		fmt.Println()
 	}
 
-	fmt.Println(len(history))
+	//fmt.Println(len(history))
 
 }
 
@@ -170,15 +174,16 @@ func doSim(lmap []light) ([]light, info) {
 		}
 	}
 
-	res.area = int64((math.Abs(float64(res.maxx)) - math.Abs(float64(res.minx)))) *
-		int64((math.Abs(float64(res.maxy)) - math.Abs(float64(res.miny))))
+	height := math.Abs(float64(res.maxx - res.minx))
+	width := math.Abs(float64(res.maxy - res.miny))
+	res.area = int64(height) * int64(width)
 
 	return lmap, res
 }
 
 func printMap(lmap []light, i info) {
-	diffx := int((math.Abs(float64(i.maxx)) - math.Abs(float64(i.minx))))
-	diffy := int((math.Abs(float64(i.maxy)) - math.Abs(float64(i.miny))))
+	diffx := int((math.Abs(float64(i.maxx - i.minx))))
+	diffy := int((math.Abs(float64(i.maxy - i.miny))))
 
 	for y := 0; y <= diffy; y++ {
 		for x := 0; x <= diffx; x++ {
