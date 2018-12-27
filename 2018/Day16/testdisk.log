@@ -1,0 +1,253 @@
+
+
+Mon Dec 17 21:01:31 2018
+Command line: TestDisk
+
+TestDisk 7.0, Data Recovery Utility, April 2015
+Christophe GRENIER <grenier@cgsecurity.org>
+http://www.cgsecurity.org
+OS: Linux, kernel 4.15.0-42-generic (#45-Ubuntu SMP Thu Nov 15 19:32:57 UTC 2018) x86_64
+Compiler: GCC 7.2
+ext2fs lib: 1.44.1, ntfs lib: libntfs-3g, reiserfs lib: none, ewf lib: none, curses lib: ncurses 6.0
+/dev/sda: LBA, HPA, LBA48, DCO support
+/dev/sda: size       468862128 sectors
+/dev/sda: user_max   468862128 sectors
+/dev/sda: native_max 468862128 sectors
+/dev/sda: dco        468862128 sectors
+/dev/sdb: LBA, HPA, LBA48, DCO support
+/dev/sdb: size       3907029168 sectors
+/dev/sdb: user_max   3907029168 sectors
+/dev/sdb: native_max 3907029168 sectors
+/dev/sdb: dco        3907029168 sectors
+/dev/sdc: LBA, HPA, LBA48, DCO support
+/dev/sdc: size       1953525168 sectors
+/dev/sdc: user_max   1953525168 sectors
+/dev/sdc: native_max 1953525168 sectors
+/dev/sdc: dco        1953525168 sectors
+Warning: can't get size for Disk /dev/mapper/control - 0 B - 0 sectors, sector size=512
+Hard disk list
+Disk /dev/sda - 240 GB / 223 GiB - CHS 29185 255 63, sector size=512 - KINGSTON SA400S37240G, S/N:50026B77820A80E1, FW:SBFK11B1
+Disk /dev/sdb - 2000 GB / 1863 GiB - CHS 243201 255 63, sector size=512 - ST2000DM006-2DM164, S/N:Z4Z9S8PR, FW:CC26
+Disk /dev/sdc - 1000 GB / 931 GiB - CHS 121601 255 63, sector size=512 - WDC WD10EZEX-00BN5A0, S/N:WD-WCC3F1CUS7HP, FW:01.01A01
+
+Partition table type (auto): Intel
+Disk /dev/sda - 240 GB / 223 GiB - KINGSTON SA400S37240G
+Partition table type: Intel
+
+Analyse Disk /dev/sda - 240 GB / 223 GiB - CHS 29185 255 63
+Geometry from i386 MBR: head=255 sector=63
+Current partition structure:
+ 1 * Linux                    0  32 33 29185  61 60  468858880
+
+search_part()
+Disk /dev/sda - 240 GB / 223 GiB - CHS 29185 255 63
+
+recover_EXT2: s_block_group_nr=0/1788, s_mnt_count=188/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 58607360
+recover_EXT2: part_size 468858880
+     Linux                    0  32 33 29185  61 60  468858880
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 240 GB / 223 GiB
+
+Results
+   * Linux                    0  32 33 29185  61 60  468858880
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 240 GB / 223 GiB
+
+Hint for advanced users. dmsetup may be used if you prefer to avoid to rewrite the partition table for the moment:
+echo "0 468858880 linear /dev/sda 2048" | dmsetup create test0
+
+interface_write()
+ 1 * Linux                    0  32 33 29185  61 60  468858880
+simulate write!
+
+write_mbr_i386: starting...
+write_all_log_i386: starting...
+No extended partition
+Partition table type (auto): Intel
+Disk /dev/sdb - 2000 GB / 1863 GiB - ST2000DM006-2DM164
+Partition table type: Intel
+
+Analyse Disk /dev/sdb - 2000 GB / 1863 GiB - CHS 243201 255 63
+Geometry from i386 MBR: head=255 sector=63
+Current partition structure:
+ 1 P Linux                    0  32 33 218885 224 27 3516399616
+ 2 E extended             218886   1 58 243201  78 13  390625282
+No partition is bootable
+ 5 L Linux Swap           218886   1 60 243201  78 13  390625280
+
+search_part()
+Disk /dev/sdb - 2000 GB / 1863 GiB - CHS 243201 255 63
+
+recover_EXT2: s_block_group_nr=0/13414, s_mnt_count=82/4294967295, s_blocks_per_group=32768, s_inodes_per_group=8192
+recover_EXT2: s_blocksize=4096
+recover_EXT2: s_blocks_count 439549952
+recover_EXT2: part_size 3516399616
+     Linux                    0  32 33 218885 224 27 3516399616
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 1800 GB / 1676 GiB
+     Linux Swap           218886   1 60 243201  77 60  390625264
+     SWAP2 version 1, pagesize=4096, 200 GB / 186 GiB
+
+Results
+   * Linux                    0  32 33 218885 224 27 3516399616
+     ext4 blocksize=4096 Large_file Sparse_SB Recover, 1800 GB / 1676 GiB
+   P Linux Swap           218886   1 60 243201  78 13  390625280
+     SWAP2 version 1, pagesize=4096, 200 GB / 186 GiB
+
+Hint for advanced users. dmsetup may be used if you prefer to avoid to rewrite the partition table for the moment:
+echo "0 3516399616 linear /dev/sdb 2048" | dmsetup create test0
+echo "0 390625280 linear /dev/sdb 3516403712" | dmsetup create test1
+
+interface_write()
+ 1 * Linux                    0  32 33 218885 224 27 3516399616
+ 2 P Linux Swap           218886   1 60 243201  78 13  390625280
+simulate write!
+
+write_mbr_i386: starting...
+write_all_log_i386: starting...
+No extended partition
+Partition table type (auto): EFI GPT
+Disk /dev/sdc - 1000 GB / 931 GiB - WDC WD10EZEX-00BN5A0
+Partition table type: EFI GPT
+
+Analyse Disk /dev/sdc - 1000 GB / 931 GiB - CHS 121601 255 63
+hdr_size=92
+hdr_lba_self=1
+hdr_lba_alt=1953525167 (expected 1953525167)
+hdr_lba_start=34
+hdr_lba_end=1953525134
+hdr_lba_table=2
+hdr_entries=128
+hdr_entsz=128
+check_part_gpt failed for partition
+ 3 P MS Reserved              1228800    1261567      32768 [Microsoft reserved partition]
+Current partition structure:
+ 1 P Unknown                     2048    1023999    1021952 [Basic data partition]
+ 2 P EFI System               1024000    1228799     204800 [EFI system partition]
+No FAT, NTFS, ext2, JFS, Reiser, cramfs or XFS marker
+ 3 P MS Reserved              1228800    1261567      32768 [Microsoft reserved partition]
+ 3 P MS Reserved              1228800    1261567      32768 [Microsoft reserved partition]
+ 4 P MS Data                  1261568  929523711  928262144 [Basic data partition]
+ 5 P Unknown                929523712 1953523711 1024000000
+
+search_part()
+Disk /dev/sdc - 1000 GB / 931 GiB - CHS 121601 255 63
+NTFS at 0/32/33
+filesystem size           1021952
+sectors_per_cluster       8
+mft_lcn                   42581
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+NTFS part_offset=1048576, part_size=523239424, sector_size=512
+NTFS partition cannot be added (part_offset<part_size).
+NTFS at 0/32/33
+filesystem size           1021952
+sectors_per_cluster       8
+mft_lcn                   42581
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+     MS Data                     2048    1023999    1021952
+     NTFS, blocksize=4096, 523 MB / 499 MiB
+FAT32 at 63/188/62
+FAT1 : 6654-7422
+FAT2 : 7423-8191
+start_rootdir : 8192 root cluster : 2
+Data : 8192-204799
+sectors : 204800
+cluster_size : 2
+no_of_cluster : 98304 (2 - 98305)
+fat_length 769 calculated 769
+set_FAT_info: name from BS used
+
+FAT32 at 63/188/62
+     MS Data                  1024000    1228799     204800 [NO NAME]
+     FAT32, blocksize=1024, 104 MB / 100 MiB
+NTFS at 78/134/57
+filesystem size           928262137
+sectors_per_cluster       8
+mft_lcn                   786432
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+NTFS part_offset=645922816, part_size=475270214144, sector_size=512
+NTFS partition cannot be added (part_offset<part_size).
+NTFS at 78/134/57
+filesystem size           928262137
+sectors_per_cluster       8
+mft_lcn                   786432
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+     MS Data                  1261568  929523704  928262137
+     NTFS, blocksize=4096, 475 GB / 442 GiB
+NTFS at 57860/44/40
+filesystem size           928262137
+sectors_per_cluster       8
+mft_lcn                   786432
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+     MS Data                  1261575  929523711  928262137
+     NTFS found using backup sector, blocksize=4096, 475 GB / 442 GiB
+NTFS at 57860/44/40
+filesystem size           928262137
+sectors_per_cluster       8
+mft_lcn                   786432
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+     MS Data                929523711 1857785847  928262137
+     NTFS, blocksize=4096, 475 GB / 442 GiB
+NTFS at 116960/91/28
+filesystem size           1953314816
+sectors_per_cluster       8
+mft_lcn                   786432
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+NTFS part_offset=962031697920, part_size=1000097185792, sector_size=512
+NTFS partition cannot be added (part_offset<part_size).
+NTFS at 116960/91/28
+filesystem size           1953314816
+sectors_per_cluster       8
+mft_lcn                   786432
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+     MS Data               1878968160 3832282975 1953314816
+     NTFS, blocksize=4096, 1000 GB / 931 GiB
+This partition ends after the disk limits. (start=1878968160, size=1953314816, end=3832282975, disk end=1953525168)
+Search for partition aborted
+Disk /dev/sdc - 1000 GB / 931 GiB - CHS 121601 255 63
+Check the harddisk size: HD jumpers settings, BIOS detection...
+The harddisk (1000 GB / 931 GiB) seems too small! (< 1962 GB / 1827 GiB)
+The following partition can't be recovered:
+     MS Data               1878968160 3832282975 1953314816
+     NTFS, blocksize=4096, 1000 GB / 931 GiB
+
+Results
+   P MS Data                     2048    1023999    1021952
+     NTFS, blocksize=4096, 523 MB / 499 MiB
+   P MS Data                  1024000    1228799     204800 [NO NAME]
+     FAT32, blocksize=1024, 104 MB / 100 MiB
+     MS Data                  1261568  929523704  928262137
+     NTFS, blocksize=4096, 475 GB / 442 GiB
+     MS Data                  1261575  929523711  928262137
+     NTFS found using backup sector, blocksize=4096, 475 GB / 442 GiB
+     MS Data                929523711 1857785847  928262137
+     NTFS, blocksize=4096, 475 GB / 442 GiB
+
+Hint for advanced users. dmsetup may be used if you prefer to avoid to rewrite the partition table for the moment:
+echo "0 1021952 linear /dev/sdc 2048" | dmsetup create test0
+echo "0 204800 linear /dev/sdc 1024000" | dmsetup create test1
+echo "0 928262137 linear /dev/sdc 1261568" | dmsetup create test2
+echo "0 928262137 linear /dev/sdc 1261575" | dmsetup create test3
+echo "0 928262137 linear /dev/sdc 929523711" | dmsetup create test4
+
+interface_write()
+ 1 P MS Data                     2048    1023999    1021952
+ 2 P MS Data                  1024000    1228799     204800 [NO NAME]
+simulate write!
+
+TestDisk exited normally.
